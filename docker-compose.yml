@@ -31,6 +31,24 @@
 #   Uncomment the `build:` lines below (and comment the matching `image:`), then `up --build`.
 # ============================================================================
 
+# ── Why these pin versions and not `:lite` ──────────────────────────────────
+#   `:lite` is a MOVING tag: it followed whatever was released last, so `docker compose
+#   pull` could swap the console under you and pair a new BFF with an old gateway. It did
+#   exactly that once — a release published the BFF and not the web image, and for a while
+#   `:lite` meant a current BFF and a two-month-old console.
+#
+#   Pinned by version rather than by digest, deliberately, and this differs from the
+#   Kubernetes manifests in the gateway repo. Those pin `@sha256:…` because a production
+#   deployment wants an immutable, auditable reference. Here, upgrading should be editing
+#   one number — a digest turns that into copying a 64-character hash out of a registry.
+#   A published version tag is not moved in practice, so the gap is small and the
+#   difference in usability is not.
+#
+#   To upgrade: change the three versions below together and `docker compose up -d`. They
+#   are released as a set, and the console requires its matching gateway — the SyncGate-UI
+#   CHANGELOG names the gateway version each release needs.
+# ============================================================================
+
 name: syncgate-lite
 
 services:
@@ -38,7 +56,7 @@ services:
   # Gateway — embedded mode. SSE + management API. LLM clients connect here.
   # --------------------------------------------------------------------------
   gateway:
-    image: ghcr.io/benwold-lgtm/device-mcp-gateway:lite   # prebuilt multi-arch (amd64/arm64)
+    image: ghcr.io/benwold-lgtm/device-mcp-gateway:0.3.6   # prebuilt multi-arch (amd64/arm64)
     # build: .                                             # …or build from source instead
     ports:
       - "8000:8000"          # MCP SSE + /v1 management API (LLM clients + the BFF)
@@ -78,7 +96,7 @@ services:
   # Not published to the host; only the web container talks to it (by name).
   # --------------------------------------------------------------------------
   device-mcp-ui-bff:                # name is fixed: web/nginx.conf proxies to this host
-    image: ghcr.io/benwold-lgtm/device-mcp-ui-bff:lite   # prebuilt multi-arch (amd64/arm64)
+    image: ghcr.io/benwold-lgtm/device-mcp-ui-bff:0.2.0   # prebuilt multi-arch (amd64/arm64)
     # build: ../syncgate-ui/bff                          # …or build from source instead
     environment:
       GATEWAY_URL: http://gateway:8000
@@ -120,7 +138,7 @@ services:
   # Web — the SPA (nginx). The front door: open http://<host>:8080.
   # --------------------------------------------------------------------------
   web:
-    image: ghcr.io/benwold-lgtm/device-mcp-ui-web:lite   # prebuilt multi-arch (amd64/arm64)
+    image: ghcr.io/benwold-lgtm/device-mcp-ui-web:0.2.0   # prebuilt multi-arch (amd64/arm64)
     # build: ../syncgate-ui/web                          # …or build from source instead
     ports:
       - "8080:8080"

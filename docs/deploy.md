@@ -26,8 +26,8 @@ images as the full deployment, in their simplest posture:
 
 ## Quickstart (published images — no source needed)
 
-The lite compose pulls prebuilt multi-arch images from GHCR (`:lite` tag), so you only need
-the compose file itself. Docker pulls the image matching your CPU automatically:
+The lite compose pulls prebuilt multi-arch images from GHCR, so you only need the compose
+file itself. Docker pulls the image matching your CPU automatically:
 
 ```bash
 curl -O https://raw.githubusercontent.com/benwold-lgtm/SyncGate-Lite/main/docker-compose.yml
@@ -36,11 +36,24 @@ docker compose up -d
 
 Then open **http://localhost:8080** and grab the generated admin login from the logs (below).
 
-The images:
+The images, pinned to a released set:
 
-- `ghcr.io/benwold-lgtm/device-mcp-gateway:lite`
-- `ghcr.io/benwold-lgtm/device-mcp-ui-bff:lite`
-- `ghcr.io/benwold-lgtm/device-mcp-ui-web:lite`
+- `ghcr.io/benwold-lgtm/device-mcp-gateway:0.3.6`
+- `ghcr.io/benwold-lgtm/device-mcp-ui-bff:0.2.0`
+- `ghcr.io/benwold-lgtm/device-mcp-ui-web:0.2.0`
+
+They are pinned rather than tracking a moving `:lite` tag, because the three are released
+as a set and the console requires its matching gateway — an 0.2.0 console against an 0.3.5
+gateway posts to a restore route that no longer exists. A moving tag can pair a new
+component with an old one silently, which is not a hypothetical: one release published the
+BFF image and not the web image, and `:lite` briefly meant a current BFF beside a
+two-month-old console.
+
+**Upgrading** is changing all three versions together and running `docker compose up -d`.
+The [SyncGate-UI CHANGELOG](https://github.com/benwold-lgtm/SyncGate-UI/blob/main/CHANGELOG.md)
+names the gateway version each console release needs, and the
+[gateway CHANGELOG](https://github.com/benwold-lgtm/SyncGate/blob/main/CHANGELOG.md) lists
+anything breaking. Read both before jumping more than one release.
 
 ### Or: build from source instead
 
