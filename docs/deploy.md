@@ -30,7 +30,7 @@ The lite compose pulls prebuilt multi-arch images from GHCR (`:lite` tag), so yo
 the compose file itself. Docker pulls the image matching your CPU automatically:
 
 ```bash
-curl -O https://raw.githubusercontent.com/benwold-lgtm/MCP-Gateway/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/benwold-lgtm/SyncGate-Lite/main/docker-compose.yml
 docker compose up -d
 ```
 
@@ -45,12 +45,12 @@ The images:
 ### Or: build from source instead
 
 Prefer to build locally? Clone both repos **side by side** (the UI build contexts point at
-`../device-mcp-gateway-ui`), uncomment the `build:` lines in
+`../syncgate-ui`), uncomment the `build:` lines in
 [`docker-compose.yml`](../docker-compose.yml) (and comment the `image:` lines), then:
 
 ```bash
-git clone https://github.com/benwold-lgtm/MCP-Gateway.git device-mcp-gateway
-git clone https://github.com/benwold-lgtm/MCP-Gateway-UI.git device-mcp-gateway-ui
+git clone https://github.com/benwold-lgtm/SyncGate.git syncgate
+git clone https://github.com/benwold-lgtm/SyncGate-UI.git syncgate-ui
 cd device-mcp-gateway
 docker compose up --build
 ```

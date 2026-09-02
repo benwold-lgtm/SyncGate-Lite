@@ -79,7 +79,7 @@ services:
   # --------------------------------------------------------------------------
   device-mcp-ui-bff:                # name is fixed: web/nginx.conf proxies to this host
     image: ghcr.io/benwold-lgtm/device-mcp-ui-bff:lite   # prebuilt multi-arch (amd64/arm64)
-    # build: ../device-mcp-gateway-ui/bff                 # …or build from source instead
+    # build: ../syncgate-ui/bff                          # …or build from source instead
     environment:
       GATEWAY_URL: http://gateway:8000
       GATEWAY_API_PREFIX: /v1
@@ -121,7 +121,7 @@ services:
   # --------------------------------------------------------------------------
   web:
     image: ghcr.io/benwold-lgtm/device-mcp-ui-web:lite   # prebuilt multi-arch (amd64/arm64)
-    # build: ../device-mcp-gateway-ui/web                 # …or build from source instead
+    # build: ../syncgate-ui/web                          # …or build from source instead
     ports:
       - "8080:8080"
     depends_on:
