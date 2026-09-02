@@ -44,6 +44,11 @@ these follows from that:
 | Multi-tenancy, a device catalog, delegated support | Those exist to let one party operate a fleet on another party's behalf. Lite has one party. |
 | Horizontal scale, HA, replicas | Embedded mode is one process by definition. That is the trade that buys "no Redis". |
 
+The console **hides** those screens rather than showing them empty. It reads the deployment
+at runtime — one web image serves every edition — so on Lite there is no Catalog button and no
+Support tab, not a Support tab with five sections that each say "none". Nothing is missing and
+nothing needs configuring: a stack with one operator has no provider by design.
+
 If you need any of them, you want the full SyncGate deployment, not a bigger Lite.
 
 ## When to use the full deployment instead

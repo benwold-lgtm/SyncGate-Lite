@@ -135,6 +135,26 @@ Device publishes no OpenAPI spec (UniFi consoles, printers, many IoT hubs)? Writ
 minimal one by hand and register with `spec_url` — walkthrough and a working UniFi example
 in [examples/specs/](../examples/specs/).
 
+### Registering an MCP server
+
+An upstream that already speaks MCP is not translated from an OpenAPI document — the gateway
+proxies it. Choose **An MCP server** under *Speaks* in the Register form, or send
+`upstream_kind`:
+
+```bash
+curl -X POST http://localhost:8000/v1/devices \
+  -H "Authorization: Bearer <gateway-api-key>" \
+  -H "Content-Type: application/json" \
+  -d '{"hostname": "notes", "base_url": "http://192.168.1.60/mcp", "upstream_kind": "mcp"}'
+```
+
+Two things the API will refuse, which the form handles for you:
+
+- **No `spec_url`.** A proxied MCP server has no OpenAPI document, and sending both is a 400.
+- **No `upstream_transport`.** It has one supported value (`http`, Streamable HTTP) and that
+  is already the default. On an OpenAPI device the gateway rejects the *key itself*, whatever
+  its value — so the safe habit is never to send it.
+
 ## Self-signed device certificates
 
 Home devices that speak HTTPS (UniFi consoles, Home Assistant, NAS boxes) almost always
